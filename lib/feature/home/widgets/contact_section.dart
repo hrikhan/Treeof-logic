@@ -1,4 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:http/http.dart' as http;
 
 import '../../../core/theme/app_theme.dart';
 import '../../../core/widgets/hover.dart';
@@ -234,8 +239,134 @@ class _ContactInfoRow extends StatelessWidget {
   }
 }
 
-class _ContactFormCard extends StatelessWidget {
+class _ContactFormCard extends StatefulWidget {
   const _ContactFormCard();
+
+  @override
+  State<_ContactFormCard> createState() => _ContactFormCardState();
+}
+
+class _ContactFormCardState extends State<_ContactFormCard> {
+  static const String _emailJsEndpoint =
+      'https://api.emailjs.com/api/v1.0/email/send';
+
+  final String _emailJsServiceId = dotenv.env['EMAILJS_SERVICE_ID'] ?? '';
+  final String _emailJsTemplateId = dotenv.env['EMAILJS_TEMPLATE_ID'] ?? '';
+  final String _emailJsPublicKey = dotenv.env['EMAILJS_PUBLIC_KEY'] ?? '';
+
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _subjectController = TextEditingController();
+  final TextEditingController _messageController = TextEditingController();
+
+  bool _isSending = false;
+
+  bool get _emailJsConfigured =>
+      _emailJsServiceId.isNotEmpty &&
+      _emailJsTemplateId.isNotEmpty &&
+      _emailJsPublicKey.isNotEmpty;
+
+  @override
+  void dispose() {
+    _nameController.dispose();
+    _emailController.dispose();
+    _subjectController.dispose();
+    _messageController.dispose();
+    super.dispose();
+  }
+
+  bool _isValidEmail(String value) {
+    return RegExp(r'^[^@\s]+@[^@\s]+\.[^@\s]+$').hasMatch(value);
+  }
+
+  void _showSnackBar(String message, {bool success = false}) {
+    if (!mounted) {
+      return;
+    }
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        backgroundColor: success ? AppColors.primary : Colors.red.shade600,
+      ),
+    );
+  }
+
+  Future<void> _sendMessage() async {
+    if (_isSending) {
+      return;
+    }
+
+    final name = _nameController.text.trim();
+    final email = _emailController.text.trim();
+    final subject = _subjectController.text.trim();
+    final message = _messageController.text.trim();
+
+    if (name.isEmpty || email.isEmpty || message.isEmpty) {
+      _showSnackBar('Please fill in name, email, and message.');
+      return;
+    }
+
+    if (!_isValidEmail(email)) {
+      _showSnackBar('Please enter a valid email address.');
+      return;
+    }
+
+    if (!_emailJsConfigured) {
+      _showSnackBar('Email service is not configured yet.');
+      return;
+    }
+
+    FocusScope.of(context).unfocus();
+    setState(() {
+      _isSending = true;
+    });
+
+    try {
+      final response = await http.post(
+        Uri.parse(_emailJsEndpoint),
+        headers: const {'Content-Type': 'application/json'},
+        body: jsonEncode(
+          {
+            'service_id': _emailJsServiceId,
+            'template_id': _emailJsTemplateId,
+            'user_id': _emailJsPublicKey,
+            'template_params': {
+              'from_name': name,
+              'from_email': email,
+              'subject': subject.isEmpty ? 'New contact request' : subject,
+              'message': message,
+              'reply_to': email,
+            },
+          },
+        ),
+      );
+
+      if (!mounted) {
+        return;
+      }
+
+      if (response.statusCode >= 200 && response.statusCode < 300) {
+        _nameController.clear();
+        _emailController.clear();
+        _subjectController.clear();
+        _messageController.clear();
+        _showSnackBar('Message sent successfully.', success: true);
+      } else {
+        _showSnackBar('Failed to send message. Please try again.');
+      }
+    } catch (_) {
+      if (!mounted) {
+        return;
+      }
+      _showSnackBar('Failed to send message. Please try again.');
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isSending = false;
+        });
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -260,43 +391,59 @@ class _ContactFormCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               if (isMobile)
-                const _LabeledField(label: 'Name', hintText: 'John Doe'),
+                _LabeledField(
+                  label: 'Name',
+                  hintText: 'John Doe',
+                  controller: _nameController,
+                ),
               if (isMobile) const SizedBox(height: 16),
               if (isMobile)
-                const _LabeledField(
+                _LabeledField(
                   label: 'Email',
                   hintText: 'john@company.com',
                   keyboardType: TextInputType.emailAddress,
+                  controller: _emailController,
                 ),
               if (!isMobile)
                 Row(
-                  children: const [
+                  children: [
                     Expanded(
-                      child: _LabeledField(label: 'Name', hintText: 'John Doe'),
+                      child: _LabeledField(
+                        label: 'Name',
+                        hintText: 'John Doe',
+                        controller: _nameController,
+                      ),
                     ),
-                    SizedBox(width: 12),
+                    const SizedBox(width: 12),
                     Expanded(
                       child: _LabeledField(
                         label: 'Email',
                         hintText: 'john@company.com',
                         keyboardType: TextInputType.emailAddress,
+                        controller: _emailController,
                       ),
                     ),
                   ],
                 ),
               const SizedBox(height: 16),
-              const _LabeledField(
+              _LabeledField(
                 label: 'Subject',
                 hintText: 'Project Inquiry',
+                controller: _subjectController,
               ),
               const SizedBox(height: 16),
-              const _LabeledField(
+              _LabeledField(
                 label: 'Message',
                 hintText: 'Tell me about your project...',
                 maxLines: 4,
+                keyboardType: TextInputType.multiline,
+                controller: _messageController,
               ),
               const SizedBox(height: 20),
-              const _SendButton(),
+              _SendButton(
+                isSending: _isSending,
+                onTap: _sendMessage,
+              ),
             ],
           );
         },
@@ -311,12 +458,14 @@ class _LabeledField extends StatelessWidget {
     required this.hintText,
     this.maxLines = 1,
     this.keyboardType = TextInputType.text,
+    this.controller,
   });
 
   final String label;
   final String hintText;
   final int maxLines;
   final TextInputType keyboardType;
+  final TextEditingController? controller;
 
   @override
   Widget build(BuildContext context) {
@@ -333,6 +482,7 @@ class _LabeledField extends StatelessWidget {
         ),
         const SizedBox(height: 6),
         TextField(
+          controller: controller,
           maxLines: maxLines,
           keyboardType: keyboardType,
           decoration: InputDecoration(
@@ -364,20 +514,32 @@ class _LabeledField extends StatelessWidget {
 }
 
 class _SendButton extends StatelessWidget {
-  const _SendButton();
+  const _SendButton({required this.isSending, required this.onTap});
+
+  final bool isSending;
+  final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
     return HoverRegion(
+      cursor: isSending ? SystemMouseCursors.basic : SystemMouseCursors.click,
       builder: (context, isHovered) {
+        final Color backgroundColor;
+        if (isSending) {
+          backgroundColor = AppColors.primary.withOpacity(0.7);
+        } else {
+          backgroundColor =
+              isHovered ? AppColors.primaryHover : AppColors.primary;
+        }
+
         return GestureDetector(
-          onTap: () {},
+          onTap: isSending ? null : onTap,
           child: AnimatedContainer(
             duration: const Duration(milliseconds: 180),
             curve: Curves.easeOut,
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
             decoration: BoxDecoration(
-              color: isHovered ? const Color(0xFF0F6ED4) : AppColors.primary,
+              color: backgroundColor,
               borderRadius: BorderRadius.circular(10),
               boxShadow: [
                 BoxShadow(
@@ -389,17 +551,27 @@ class _SendButton extends StatelessWidget {
             ),
             child: Row(
               mainAxisSize: MainAxisSize.min,
-              children: const [
+              children: [
                 Text(
-                  'Send Message',
-                  style: TextStyle(
+                  isSending ? 'Sending...' : 'Send Message',
+                  style: const TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.w700,
                     color: Colors.white,
                   ),
                 ),
-                SizedBox(width: 8),
-                Icon(Icons.arrow_forward, color: Colors.white, size: 18),
+                const SizedBox(width: 8),
+                if (isSending)
+                  const SizedBox(
+                    width: 16,
+                    height: 16,
+                    child: CircularProgressIndicator(
+                      strokeWidth: 2,
+                      valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                    ),
+                  )
+                else
+                  const Icon(Icons.arrow_forward, color: Colors.white, size: 18),
               ],
             ),
           ),

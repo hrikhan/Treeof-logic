@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
@@ -95,40 +96,27 @@ class _HeroContent extends StatelessWidget {
           ],
         ),
         const SizedBox(height: 16),
-        Semantics(
-          header: true,
-          child: RichText(
-            text: TextSpan(
-              style: TextStyle(
-                fontFamily: 'Inter',
-                fontSize: titleSize,
-                fontWeight: FontWeight.w900,
-                height: 1.1,
-                letterSpacing: -0.6,
-                color: AppColors.textPrimary,
-              ),
-              children: const [
-                TextSpan(text: 'Junior '),
-                TextSpan(
-                  text: 'Flutter',
-                  style: TextStyle(color: AppColors.primary),
-                ),
-                TextSpan(text: ' Developer'),
-              ],
-            ),
-          ),
-        ),
+        _AnimatedTitle(titleSize: titleSize),
         const SizedBox(height: 16),
         ConstrainedBox(
           constraints: const BoxConstraints(maxWidth: 540),
           child: Text(
-            'I craft pixel-perfect, high-performance applications from a single codebase. '
-            'Turning complex problems into elegant cross-platform experiences for mobile, '
-            'web, and desktop.',
+            'I build clean, fast Flutter apps for Android, iOS, web, and desktop. '
+            'From UI polish and state management to REST/GraphQL APIs, I focus on '
+            'performance, scalability, and smooth user experiences. '
+            'I also add AI features when needed to make products smarter and more useful.',
+            textAlign: TextAlign.justify,
             style: TextStyle(
               fontSize: isMobile ? 16 : 18,
               height: 1.6,
               color: AppColors.textMuted,
+              shadows: [
+                Shadow(
+                  color: Colors.black.withOpacity(0.08),
+                  offset: const Offset(0, 1),
+                  blurRadius: 2,
+                ),
+              ],
             ),
           ),
         ),
@@ -179,11 +167,11 @@ class _PrimaryButton extends StatelessWidget {
         return GestureDetector(
           onTap: onTap,
           child: AnimatedContainer(
-            duration: const Duration(milliseconds: 180),
+            duration: const Duration(milliseconds: 1800),
             curve: Curves.easeOut,
             padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
             decoration: BoxDecoration(
-              color: isHovered ? const Color(0xFF0F6ED4) : AppColors.primary,
+              color: isHovered ? AppColors.primaryHover : AppColors.primary,
               borderRadius: BorderRadius.circular(12),
               boxShadow: [
                 BoxShadow(
@@ -263,6 +251,170 @@ class _OutlineButton extends StatelessWidget {
       },
     );
   }
+}
+
+class _AnimatedTitle extends StatefulWidget {
+  const _AnimatedTitle({required this.titleSize});
+
+  final double titleSize;
+
+  @override
+  State<_AnimatedTitle> createState() => _AnimatedTitleState();
+}
+
+class _AnimatedTitleState extends State<_AnimatedTitle> {
+  static const Duration _displayDuration = Duration(milliseconds: 2200);
+  static const Duration _switchDuration = Duration(milliseconds: 520);
+
+  late final List<_AnimatedTitleItem> _items = [
+    _AnimatedTitleItem(
+      key: 'flutter_developer',
+      spans: const [
+        TextSpan(
+          text: 'Junior ',
+          style: TextStyle(color: AppColors.backgroundDark),
+        ),
+        TextSpan(
+          text: 'Flutter',
+          style: TextStyle(color: AppColors.primary),
+        ),
+        TextSpan(text: ' Developer'),
+      ],
+    ),
+    _AnimatedTitleItem(
+      key: 'android_ios',
+      spans: const [
+        TextSpan(text: 'Building '),
+        TextSpan(
+          text: 'Android',
+          style: TextStyle(color: AppColors.primary),
+        ),
+        TextSpan(text: ' & '),
+        TextSpan(
+          text: 'iOS',
+          style: TextStyle(color: AppColors.primary),
+        ),
+        TextSpan(text: ' apps'),
+      ],
+    ),
+    _AnimatedTitleItem(
+      key: 'api',
+      spans: const [
+        TextSpan(text: 'Connect '),
+        TextSpan(
+          text: 'Flutter',
+          style: TextStyle(color: AppColors.primary),
+        ),
+        TextSpan(text: ' app with any '),
+        TextSpan(
+          text: 'API',
+          style: TextStyle(color: AppColors.primary),
+        ),
+      ],
+    ),
+    _AnimatedTitleItem(
+      key: 'ai',
+      spans: const [
+        TextSpan(text: 'Implement '),
+        TextSpan(
+          text: 'AI',
+          style: TextStyle(color: AppColors.primary),
+        ),
+        TextSpan(text: ' in app'),
+      ],
+    ),
+  ];
+
+  int _currentIndex = 0;
+  Timer? _timer;
+
+  TextStyle get _baseStyle => TextStyle(
+    fontFamily: 'Inter',
+    fontSize: widget.titleSize,
+    fontWeight: FontWeight.w900,
+    height: 1.1,
+    letterSpacing: -0.6,
+    color: AppColors.textPrimary,
+  );
+
+  @override
+  void initState() {
+    super.initState();
+    _timer = Timer.periodic(_displayDuration, (_) {
+      if (!mounted) {
+        return;
+      }
+      setState(() {
+        _currentIndex = (_currentIndex + 1) % _items.length;
+      });
+    });
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final item = _items[_currentIndex];
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final double maxWidth = constraints.maxWidth.isFinite
+            ? constraints.maxWidth
+            : MediaQuery.of(context).size.width;
+        final TextDirection textDirection = Directionality.of(context);
+        double maxHeight = 0;
+        for (final title in _items) {
+          final painter = TextPainter(
+            text: TextSpan(style: _baseStyle, children: title.spans),
+            textDirection: textDirection,
+          )..layout(maxWidth: maxWidth);
+          if (painter.height > maxHeight) {
+            maxHeight = painter.height;
+          }
+        }
+
+        return Semantics(
+          header: true,
+          child: SizedBox(
+            height: maxHeight,
+            child: Align(
+              alignment: Alignment.centerLeft,
+              child: AnimatedSwitcher(
+                duration: _switchDuration,
+                switchInCurve: Curves.easeOutCubic,
+                switchOutCurve: Curves.easeInCubic,
+                transitionBuilder: (child, animation) {
+                  final slide = Tween<Offset>(
+                    begin: const Offset(0, 0.18),
+                    end: Offset.zero,
+                  ).animate(animation);
+                  return FadeTransition(
+                    opacity: animation,
+                    child: SlideTransition(position: slide, child: child),
+                  );
+                },
+                child: RichText(
+                  key: ValueKey(item.key),
+                  textAlign: TextAlign.left,
+                  text: TextSpan(style: _baseStyle, children: item.spans),
+                ),
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+}
+
+class _AnimatedTitleItem {
+  const _AnimatedTitleItem({required this.key, required this.spans});
+
+  final String key;
+  final List<TextSpan> spans;
 }
 
 class _HeroVisual extends StatelessWidget {
