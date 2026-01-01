@@ -42,22 +42,14 @@ class ExperienceSection extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const Text(
-                  'Experience',
+                  'Work Experience',
                   style: TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.w700,
                     color: AppColors.textPrimary,
                   ),
                 ),
-                const SizedBox(height: 12),
-                const Text(
-                  'Work Experience',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w700,
-                    color: AppColors.textPrimary,
-                  ),
-                ),
+
                 const SizedBox(height: 16),
                 Column(
                   children: _experiences
@@ -204,8 +196,11 @@ class _ExperienceCard extends StatelessWidget {
               color: AppColors.primary.withOpacity(0.1),
               shape: BoxShape.circle,
             ),
-            child: const Icon(Icons.work_outline,
-                color: AppColors.primary, size: 20),
+            child: const Icon(
+              Icons.work_outline,
+              color: AppColors.primary,
+              size: 20,
+            ),
           ),
           const SizedBox(width: 12),
           Expanded(

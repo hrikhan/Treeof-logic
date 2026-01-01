@@ -14,22 +14,24 @@ class ProjectsSection extends StatelessWidget {
     ProjectItem(
       title: 'Aurora Shop',
       category: 'E-commerce Apps',
-      description: 'Multi-vendor catalog with smart search and smooth checkout.',
+      description:
+          'Multi-vendor catalog with smart search and smooth checkout.',
       techStack: ['Flutter', 'Dart', 'Firebase', 'Stripe'],
-      repoUrl: 'https://github.com/hrikhan/aurora-shop',
+      repoUrl: 'Private Repository',
       imageName: 'project_01.jpg',
     ),
     ProjectItem(
-      title: 'Cartly Market',
+      title: 'Hamdann Market',
       category: 'E-commerce Apps',
-      description: 'Grocery ordering with real-time inventory and delivery slots.',
+      description:
+          'Multi-vendor catalog with smart search and smooth checkout.',
       techStack: ['Flutter', 'Dart', 'Firebase', 'Maps'],
       repoUrl: 'https://github.com/hrikhan/cartly-market',
       imageName: 'project_02.jpg',
     ),
     ProjectItem(
-      title: 'Trendify Store',
-      category: 'E-commerce Apps',
+      title: 'Deep Quran',
+      category: 'A Quran Study App',
       description: 'Fashion storefront with wishlists and order tracking.',
       techStack: ['Flutter', 'Dart', 'REST', 'Hive'],
       repoUrl: 'https://github.com/hrikhan/trendify-store',
@@ -187,13 +189,13 @@ class ProjectsSection extends StatelessWidget {
             final cardWidth = sizingInfo.isMobile
                 ? 240.0
                 : sizingInfo.isTablet
-                    ? 280.0
-                    : 320.0;
+                ? 280.0
+                : 320.0;
             final cardHeight = sizingInfo.isMobile
                 ? 280.0
                 : sizingInfo.isTablet
-                    ? 300.0
-                    : 320.0;
+                ? 300.0
+                : 320.0;
 
             final firstRow = _projects.sublist(0, 10);
             final secondRow = _projects.sublist(10);
@@ -355,9 +357,7 @@ class _AutoScrollRowState extends State<AutoScrollRow> {
         itemCount: items.length,
         itemBuilder: (context, index) {
           return Padding(
-            padding: EdgeInsets.only(
-              right: index == items.length - 1 ? 0 : 20,
-            ),
+            padding: EdgeInsets.only(right: index == items.length - 1 ? 0 : 20),
             child: SizedBox(
               width: widget.cardWidth,
               height: widget.cardHeight,
