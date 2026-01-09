@@ -1,10 +1,9 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
+import 'package:url_launcher/link.dart';
 
 import '../../../core/theme/app_theme.dart';
 import '../../../core/widgets/hover.dart';
-import '../../../core/widgets/link_text.dart';
 import '../../../core/widgets/responsive_builder.dart';
 
 class ProjectsSection extends StatelessWidget {
@@ -12,166 +11,144 @@ class ProjectsSection extends StatelessWidget {
 
   static const List<ProjectItem> _projects = [
     ProjectItem(
-      title: 'Aurora Shop',
-      category: 'E-commerce Apps',
-      description:
-          'Multi-vendor catalog with smart search and smooth checkout.',
-      techStack: ['Flutter', 'Dart', 'Firebase', 'Stripe'],
-      repoUrl: 'Private Repository',
-      imageName: 'project_01.jpg',
+      title: 'Billedsmart',
+      subtitle: 'Smart bill negotiation',
+      techStack: ['Flutter', 'GetX', 'RESTful API'],
+      tag: 'Billing',
+      imageUrl:
+          'https://images.unsplash.com/photo-1520607162513-77705c0f0d4a?auto=format&fit=crop&w=600&q=80',
+      linkUrl: 'https://hridoysoft.com/projects/billedsmart',
+      accent: AppColors.primary,
     ),
     ProjectItem(
-      title: 'Hamdann Market',
-      category: 'E-commerce Apps',
-      description:
-          'Multi-vendor catalog with smart search and smooth checkout.',
-      techStack: ['Flutter', 'Dart', 'Firebase', 'Maps'],
-      repoUrl: 'https://github.com/hrikhan/cartly-market',
-      imageName: 'project_02.jpg',
+      title: 'DeepQuran',
+      subtitle: 'Quran learning app',
+      techStack: ['Flutter', 'GetX', 'AI'],
+      tag: 'Education',
+      imageUrl:
+          'https://images.unsplash.com/photo-1487014679447-9f8336841d58?auto=format&fit=crop&w=600&q=80',
+      linkUrl: 'https://hridoysoft.com/projects/deepquran',
+      accent: AppColors.primaryHover,
     ),
     ProjectItem(
-      title: 'Deep Quran',
-      category: 'A Quran Study App',
-      description: 'Fashion storefront with wishlists and order tracking.',
-      techStack: ['Flutter', 'Dart', 'REST', 'Hive'],
-      repoUrl: 'https://github.com/hrikhan/trendify-store',
-      imageName: 'project_03.jpg',
+      title: 'Hamdann Ecommerce',
+      subtitle: 'E-commerce experience',
+      techStack: ['Flutter', 'GetX', 'RESTful API'],
+      tag: 'Marketplace',
+      imageUrl:
+          'https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=600&q=80',
+      linkUrl: 'https://hridoysoft.com/projects/hamdann-ecommerce',
+      accent: AppColors.borderDark,
     ),
     ProjectItem(
-      title: 'QuickCart POS',
-      category: 'E-commerce Apps',
-      description: 'Point-of-sale companion with barcode scanning.',
-      techStack: ['Flutter', 'Dart', 'Firebase'],
-      repoUrl: 'https://github.com/hrikhan/quickcart-pos',
-      imageName: 'project_04.jpg',
+      title: 'Heartbeat Measure',
+      subtitle: 'Student wellness',
+      techStack: ['Flutter', 'GetX', 'RESTful API'],
+      tag: 'Health',
+      imageUrl:
+          'https://images.unsplash.com/photo-1529333166437-7750a6dd5a70?auto=format&fit=crop&w=600&q=80',
+      linkUrl: 'https://hridoysoft.com/projects/heartbeat-measure',
+      accent: AppColors.primary,
     ),
     ProjectItem(
-      title: 'FreshBasket',
-      category: 'E-commerce Apps',
-      description: 'Subscription baskets with reminders and delivery insights.',
-      techStack: ['Flutter', 'Dart', 'Firebase'],
-      repoUrl: 'https://github.com/hrikhan/freshbasket',
-      imageName: 'project_05.jpg',
+      title: 'Docmnk',
+      subtitle: 'Hospital management',
+      techStack: ['Flutter', 'GetX', 'RESTful API'],
+      tag: 'Hospital',
+      imageUrl:
+          'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=600&q=80',
+      linkUrl: 'https://hridoysoft.com/projects/docmnk',
+      accent: AppColors.primaryHover,
     ),
     ProjectItem(
-      title: 'ChatWave',
-      category: 'Chat Applications',
-      description: 'Group messaging with media sharing and reactions.',
-      techStack: ['Flutter', 'Dart', 'Firebase', 'WebSockets'],
-      repoUrl: 'https://github.com/hrikhan/chatwave',
-      imageName: 'project_06.jpg',
+      title: 'Doctor AI',
+      subtitle: 'AI doctor training',
+      techStack: ['Flutter', 'GetX', 'AI'],
+      tag: 'AI',
+      imageUrl:
+          'https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=600&q=80',
+      linkUrl: 'https://hridoysoft.com/projects/doctor-ai',
+      accent: AppColors.borderDark,
     ),
     ProjectItem(
-      title: 'Pulse Talk',
-      category: 'Chat Applications',
-      description: 'Secure 1:1 chat with read receipts and typing status.',
-      techStack: ['Flutter', 'Dart', 'Firebase'],
-      repoUrl: 'https://github.com/hrikhan/pulse-talk',
-      imageName: 'project_07.jpg',
+      title: 'Prajanti Ecommerce',
+      subtitle: 'B2B commerce',
+      techStack: ['Flutter', 'GetX', 'RESTful API'],
+      tag: 'Commerce',
+      imageUrl:
+          'https://images.unsplash.com/photo-1521791136064-7986c2920216?auto=format&fit=crop&w=600&q=80',
+      linkUrl: 'https://hridoysoft.com/projects/prajanti-ecommerce',
+      accent: AppColors.primary,
     ),
     ProjectItem(
-      title: 'TeamSync',
-      category: 'Chat Applications',
-      description: 'Work chat with channels, mentions, and quick search.',
-      techStack: ['Flutter', 'Dart', 'REST'],
-      repoUrl: 'https://github.com/hrikhan/teamsync',
-      imageName: 'project_08.jpg',
+      title: 'School Point',
+      subtitle: 'Event rewards',
+      techStack: ['Flutter', 'GetX', 'RESTful API'],
+      tag: 'Education',
+      imageUrl:
+          'https://images.unsplash.com/photo-1545239351-1141bd82e8a6?auto=format&fit=crop&w=600&q=80',
+      linkUrl: 'https://hridoysoft.com/projects/school-point',
+      accent: AppColors.primaryHover,
     ),
     ProjectItem(
-      title: 'Orbit Messenger',
-      category: 'Chat Applications',
-      description: 'Voice notes and message scheduling for remote teams.',
-      techStack: ['Flutter', 'Dart', 'Firebase'],
-      repoUrl: 'https://github.com/hrikhan/orbit-messenger',
-      imageName: 'project_09.jpg',
+      title: 'Infix',
+      subtitle: 'Learning management system',
+      techStack: ['Flutter', 'GetX', 'RESTful API'],
+      tag: 'LMS',
+      imageUrl:
+          'https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=600&q=80',
+      linkUrl: 'https://hridoysoft.com/projects/infix-lms',
+      accent: AppColors.borderDark,
     ),
     ProjectItem(
-      title: 'Relay Chat',
-      category: 'Chat Applications',
-      description: 'Lightweight chat UI kit for rapid prototypes.',
-      techStack: ['Flutter', 'Dart'],
-      repoUrl: 'https://github.com/hrikhan/relay-chat',
-      imageName: 'project_10.jpg',
+      title: 'Call YOU',
+      subtitle: 'Video calling',
+      techStack: ['Flutter', 'GetX', 'RESTful API'],
+      tag: 'Video',
+      imageUrl:
+          'https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=600&q=80',
+      linkUrl: 'https://hridoysoft.com/projects/call-you',
+      accent: AppColors.primary,
     ),
     ProjectItem(
-      title: 'VaultPay',
-      category: 'Banking & Financial Tools',
-      description: 'Personal finance dashboard with insights and goals.',
-      techStack: ['Flutter', 'Dart', 'Charts'],
-      repoUrl: 'https://github.com/hrikhan/vaultpay',
-      imageName: 'project_11.jpg',
+      title: 'Kunduli Match',
+      subtitle: 'Dating app',
+      techStack: ['Flutter', 'GetX', 'RESTful API'],
+      tag: 'Social',
+      imageUrl:
+          'https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=600&q=80',
+      linkUrl: 'https://hridoysoft.com/projects/kunduli-match',
+      accent: AppColors.primaryHover,
     ),
     ProjectItem(
-      title: 'Ledgerly',
-      category: 'Banking & Financial Tools',
-      description: 'Expense tracking with smart budgets and alerts.',
-      techStack: ['Flutter', 'Dart', 'SQLite'],
-      repoUrl: 'https://github.com/hrikhan/ledgerly',
-      imageName: 'project_12.jpg',
+      title: 'Yopo',
+      subtitle: 'Tenant app',
+      techStack: ['Flutter', 'GetX', 'RESTful API'],
+      tag: 'Property',
+      imageUrl:
+          'https://images.unsplash.com/photo-1520607162513-77705c0f0d4a?auto=format&fit=crop&w=600&q=80',
+      linkUrl: 'https://hridoysoft.com/projects/yopo',
+      accent: AppColors.borderDark,
     ),
     ProjectItem(
-      title: 'Prism Wallet',
-      category: 'Banking & Financial Tools',
-      description: 'Digital wallet with card management and security controls.',
-      techStack: ['Flutter', 'Dart', 'Firebase'],
-      repoUrl: 'https://github.com/hrikhan/prism-wallet',
-      imageName: 'project_13.jpg',
+      title: 'Task Management',
+      subtitle: 'Team workflow',
+      techStack: ['Flutter', 'GetX', 'RESTful API'],
+      tag: 'Productivity',
+      imageUrl:
+          'https://images.unsplash.com/photo-1529333166437-7750a6dd5a70?auto=format&fit=crop&w=600&q=80',
+      linkUrl: 'https://hridoysoft.com/projects/task-management',
+      accent: AppColors.primary,
     ),
     ProjectItem(
-      title: 'SafeSpend',
-      category: 'Banking & Financial Tools',
-      description: 'Spend limits and alerts for teams and families.',
-      techStack: ['Flutter', 'Dart', 'REST'],
-      repoUrl: 'https://github.com/hrikhan/safespend',
-      imageName: 'project_14.jpg',
-    ),
-    ProjectItem(
-      title: 'Capital Flow',
-      category: 'Banking & Financial Tools',
-      description: 'Loan calculator and repayment planner.',
-      techStack: ['Flutter', 'Dart'],
-      repoUrl: 'https://github.com/hrikhan/capital-flow',
-      imageName: 'project_15.jpg',
-    ),
-    ProjectItem(
-      title: 'Flutter Lab',
-      category: 'Flutter Experiments',
-      description: 'Component playground with design tokens.',
-      techStack: ['Flutter', 'Dart'],
-      repoUrl: 'https://github.com/hrikhan/flutter-lab',
-      imageName: 'project_16.jpg',
-    ),
-    ProjectItem(
-      title: 'Motion Kit',
-      category: 'Flutter Experiments',
-      description: 'Animation studies with micro-interactions.',
-      techStack: ['Flutter', 'Dart'],
-      repoUrl: 'https://github.com/hrikhan/motion-kit',
-      imageName: 'project_17.jpg',
-    ),
-    ProjectItem(
-      title: 'AR Notes',
-      category: 'Flutter Experiments',
-      description: 'Spatial note concept using device sensors.',
-      techStack: ['Flutter', 'Dart'],
-      repoUrl: 'https://github.com/hrikhan/ar-notes',
-      imageName: 'project_18.jpg',
-    ),
-    ProjectItem(
-      title: 'Smart Home Demo',
-      category: 'Flutter Experiments',
-      description: 'IoT dashboard with live device states.',
-      techStack: ['Flutter', 'Dart', 'Firebase'],
-      repoUrl: 'https://github.com/hrikhan/smart-home-demo',
-      imageName: 'project_19.jpg',
-    ),
-    ProjectItem(
-      title: 'Pulse Viz',
-      category: 'Flutter Experiments',
-      description: 'Realtime data visualization playground.',
-      techStack: ['Flutter', 'Dart', 'WebSockets'],
-      repoUrl: 'https://github.com/hrikhan/pulse-viz',
-      imageName: 'project_20.jpg',
+      title: 'Romain Institute School Bill',
+      subtitle: 'School billing',
+      techStack: ['Flutter', 'GetX', 'RESTful API'],
+      tag: 'Education',
+      imageUrl:
+          'https://images.unsplash.com/photo-1523580846011-d3a5bc25702b?auto=format&fit=crop&w=600&q=80',
+      linkUrl: 'https://hridoysoft.com/projects/romain-institute-school-bill',
+      accent: AppColors.primaryHover,
     ),
   ];
 
@@ -187,18 +164,19 @@ class ProjectsSection extends StatelessWidget {
         child: ResponsiveBuilder(
           builder: (context, sizingInfo) {
             final cardWidth = sizingInfo.isMobile
-                ? 240.0
+                ? 280.0
                 : sizingInfo.isTablet
                 ? 280.0
-                : 320.0;
+                : 300.0;
             final cardHeight = sizingInfo.isMobile
-                ? 280.0
+                ? 300.0
                 : sizingInfo.isTablet
                 ? 300.0
-                : 320.0;
+                : 300.0;
 
-            final firstRow = _projects.sublist(0, 10);
-            final secondRow = _projects.sublist(10);
+            final half = (_projects.length / 2).ceil();
+            final firstRow = _projects.sublist(0, half);
+            final secondRow = _projects.sublist(half);
 
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -211,7 +189,7 @@ class ProjectsSection extends StatelessWidget {
                     color: AppColors.textPrimary,
                   ),
                 ),
-                const SizedBox(height: 12),
+                const SizedBox(height: 8),
                 const Text(
                   'GitHub-driven case studies with focused descriptions and tech stacks.',
                   style: TextStyle(
@@ -246,19 +224,21 @@ class ProjectsSection extends StatelessWidget {
 class ProjectItem {
   const ProjectItem({
     required this.title,
-    required this.category,
-    required this.description,
+    required this.subtitle,
     required this.techStack,
-    required this.repoUrl,
-    required this.imageName,
+    required this.linkUrl,
+    required this.imageUrl,
+    required this.tag,
+    required this.accent,
   });
 
   final String title;
-  final String category;
-  final String description;
+  final String subtitle;
   final List<String> techStack;
-  final String repoUrl;
-  final String imageName;
+  final String linkUrl;
+  final String imageUrl;
+  final String tag;
+  final Color accent;
 }
 
 enum ScrollDirection { leftToRight, rightToLeft }
@@ -270,7 +250,7 @@ class AutoScrollRow extends StatefulWidget {
     required this.direction,
     required this.cardWidth,
     required this.cardHeight,
-    this.speed = 0.6,
+    this.speed = 40,
   });
 
   final List<ProjectItem> items;
@@ -283,24 +263,21 @@ class AutoScrollRow extends StatefulWidget {
   State<AutoScrollRow> createState() => _AutoScrollRowState();
 }
 
-class _AutoScrollRowState extends State<AutoScrollRow> {
+class _AutoScrollRowState extends State<AutoScrollRow>
+    with SingleTickerProviderStateMixin {
   final ScrollController _controller = ScrollController();
-  Timer? _timer;
+  late final Ticker _ticker;
+  Duration? _lastTick;
   double _loopExtent = 0;
 
   @override
   void initState() {
     super.initState();
+    _ticker = createTicker(_onTick);
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (!mounted) {
-        return;
-      }
+      if (!mounted) return;
       _updateLoopExtent();
-      if (widget.direction == ScrollDirection.rightToLeft &&
-          _controller.hasClients) {
-        _controller.jumpTo(_loopExtent);
-      }
-      _timer ??= Timer.periodic(const Duration(milliseconds: 16), _tick);
+      _ticker.start();
     });
   }
 
@@ -318,21 +295,29 @@ class _AutoScrollRowState extends State<AutoScrollRow> {
     _loopExtent = maxExtent > 0 ? maxExtent / 2 : 0;
   }
 
-  void _tick(Timer timer) {
-    if (!_controller.hasClients || _loopExtent == 0) {
+  void _onTick(Duration elapsed) {
+    if (!mounted || !_controller.hasClients) return;
+    if (_loopExtent == 0) {
       _updateLoopExtent();
       return;
     }
+    if (_lastTick == null) {
+      _lastTick = elapsed;
+      return;
+    }
 
-    final delta = widget.direction == ScrollDirection.leftToRight
-        ? widget.speed
-        : -widget.speed;
-    var nextOffset = _controller.offset + delta;
-
-    if (nextOffset >= _loopExtent) {
-      nextOffset -= _loopExtent;
-    } else if (nextOffset < 0) {
-      nextOffset += _loopExtent;
+    final deltaSeconds = (elapsed - _lastTick!).inMicroseconds / 1e6;
+    _lastTick = elapsed;
+    final directionFactor = widget.direction == ScrollDirection.leftToRight
+        ? 1.0
+        : -1.0;
+    var nextOffset =
+        _controller.offset + directionFactor * widget.speed * deltaSeconds;
+    if (_loopExtent > 0) {
+      nextOffset %= _loopExtent;
+      if (nextOffset < 0) {
+        nextOffset += _loopExtent;
+      }
     }
 
     _controller.jumpTo(nextOffset);
@@ -340,7 +325,7 @@ class _AutoScrollRowState extends State<AutoScrollRow> {
 
   @override
   void dispose() {
-    _timer?.cancel();
+    _ticker.dispose();
     _controller.dispose();
     super.dispose();
   }
@@ -399,11 +384,9 @@ class ProjectCard extends StatelessWidget {
             padding: const EdgeInsets.all(16),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
               children: [
-                _ProjectPreview(
-                  category: project.category,
-                  imageName: project.imageName,
-                ),
+                _ProjectPreview(project: project),
                 const SizedBox(height: 12),
                 Text(
                   project.title,
@@ -415,40 +398,75 @@ class ProjectCard extends StatelessWidget {
                     color: AppColors.textPrimary,
                   ),
                 ),
-                const SizedBox(height: 6),
+                const SizedBox(height: 4),
                 Text(
-                  project.description,
-                  maxLines: 2,
+                  project.subtitle,
+                  maxLines: 1,
                   overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(
-                    fontSize: 13,
-                    height: 1.5,
-                    color: AppColors.textMuted,
+                  style: TextStyle(
+                    fontSize: 12,
+                    letterSpacing: 0.4,
+                    color: project.accent,
+                    fontWeight: FontWeight.w600,
                   ),
                 ),
-                const SizedBox(height: 10),
+                const SizedBox(height: 6),
                 Wrap(
                   spacing: 6,
                   runSpacing: 6,
                   children: project.techStack
-                      .map((tech) => _TechChip(label: tech))
+                      .map(
+                        (tech) => Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 8,
+                            vertical: 4,
+                          ),
+                          decoration: BoxDecoration(
+                            color: AppColors.chipLight,
+                            borderRadius: BorderRadius.circular(999),
+                            border: Border.all(color: AppColors.borderLight),
+                          ),
+                          child: Text(
+                            tech,
+                            style: const TextStyle(
+                              fontSize: 10,
+                              fontWeight: FontWeight.w600,
+                              color: AppColors.textPrimary,
+                            ),
+                          ),
+                        ),
+                      )
                       .toList(),
                 ),
-                const Spacer(),
-                Row(
-                  children: [
-                    const Icon(Icons.link, size: 16, color: AppColors.primary),
-                    const SizedBox(width: 6),
-                    Expanded(
-                      child: LinkText(
-                        label: project.repoUrl.replaceFirst('https://', ''),
-                        url: project.repoUrl,
-                        fontSize: 12,
-                        fontWeight: FontWeight.w600,
-                        maxLines: 1,
+                const SizedBox(height: 20),
+                Link(
+                  uri: Uri.parse(project.linkUrl),
+                  builder: (context, followLink) {
+                    return Container(
+                      width: double.infinity,
+                      height: 36,
+                      decoration: BoxDecoration(
+                        color: project.accent,
+                        borderRadius: BorderRadius.circular(8),
                       ),
-                    ),
-                  ],
+                      alignment: Alignment.center,
+                      child: InkWell(
+                        onTap: followLink,
+                        borderRadius: BorderRadius.circular(8),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 12),
+                          child: Text(
+                            'Visit ${project.title}',
+                            style: const TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                      ),
+                    );
+                  },
                 ),
               ],
             ),
@@ -460,29 +478,39 @@ class ProjectCard extends StatelessWidget {
 }
 
 class _ProjectPreview extends StatelessWidget {
-  const _ProjectPreview({required this.category, required this.imageName});
+  const _ProjectPreview({required this.project});
 
-  final String category;
-  final String imageName;
+  final ProjectItem project;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 90,
+      height: 120,
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(14),
-        gradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [
-            AppColors.primary.withOpacity(0.15),
-            const Color(0xFFE8EEF5),
-          ],
+        borderRadius: BorderRadius.circular(16),
+        image: DecorationImage(
+          image: NetworkImage(project.imageUrl),
+          fit: BoxFit.cover,
         ),
         border: Border.all(color: AppColors.borderLight),
       ),
       child: Stack(
         children: [
+          Positioned.fill(
+            child: Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(16),
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    Colors.black.withOpacity(0.05),
+                    Colors.black.withOpacity(0.35),
+                  ],
+                ),
+              ),
+            ),
+          ),
           Positioned(
             left: 12,
             top: 10,
@@ -494,7 +522,7 @@ class _ProjectPreview extends StatelessWidget {
                 border: Border.all(color: AppColors.borderLight),
               ),
               child: Text(
-                category,
+                project.tag,
                 style: const TextStyle(
                   fontSize: 10,
                   fontWeight: FontWeight.w600,
@@ -503,56 +531,7 @@ class _ProjectPreview extends StatelessWidget {
               ),
             ),
           ),
-          const Align(
-            alignment: Alignment.center,
-            child: Icon(
-              Icons.image_outlined,
-              size: 26,
-              color: AppColors.primary,
-            ),
-          ),
-          Positioned(
-            left: 12,
-            right: 12,
-            bottom: 8,
-            child: Text(
-              imageName,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: const TextStyle(
-                fontSize: 10,
-                fontWeight: FontWeight.w600,
-                color: AppColors.textMuted,
-              ),
-            ),
-          ),
         ],
-      ),
-    );
-  }
-}
-
-class _TechChip extends StatelessWidget {
-  const _TechChip({required this.label});
-
-  final String label;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-      decoration: BoxDecoration(
-        color: AppColors.chipLight,
-        borderRadius: BorderRadius.circular(999),
-        border: Border.all(color: AppColors.borderLight),
-      ),
-      child: Text(
-        label,
-        style: const TextStyle(
-          fontSize: 11,
-          fontWeight: FontWeight.w600,
-          color: AppColors.textPrimary,
-        ),
       ),
     );
   }

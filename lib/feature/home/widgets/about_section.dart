@@ -7,17 +7,15 @@ class AboutSection extends StatelessWidget {
   const AboutSection({super.key});
 
   static const List<String> _whatIDo = [
-    'Build responsive and interactive mobile applications',
-    'Design clean UI/UX with a strong focus on performance',
-    'Develop scalable app architectures using best practices',
-    'RESTful API calls',
-    'Integrate Firebase and local databases for real-time data and persistence',
+    'Architect human-centered Flutter apps that feel native across mobile, web, and desktop.',
+    'Implement clean UI systems powered by GetX for state, navigation, and dependency control.',
+    'Wire RESTful APIs, Firebase, and data layers so features scale while staying performant.',
   ];
 
   static const List<String> _currentFocus = [
-    'Advanced state management',
-    'App architecture and design patterns',
-    'Performance optimization for large-scale apps',
+    'Building AI-driven assistants and automation flows inside client dashboards.',
+    'Modernizing onboarding analytics with live telemetry and responsive dashboards.',
+    'Sharpening design/code cohesion for smoother handoffs and maintainable codebases.',
   ];
 
   @override
@@ -76,6 +74,7 @@ class AboutSection extends StatelessWidget {
                               title: 'What I Do',
                               subtitle: 'Core services and delivery focus.',
                               items: _whatIDo,
+                              accentColor: AppColors.primary,
                             ),
                           ),
                           const SizedBox(width: 24),
@@ -85,6 +84,7 @@ class AboutSection extends StatelessWidget {
                               subtitle:
                                   'Deepening Flutter expertise and modern practices.',
                               items: _currentFocus,
+                              accentColor: AppColors.primaryHover,
                             ),
                           ),
                         ],
@@ -95,6 +95,7 @@ class AboutSection extends StatelessWidget {
                             title: 'What I Do',
                             subtitle: 'Core services and delivery focus.',
                             items: _whatIDo,
+                            accentColor: AppColors.primary,
                           ),
                           const SizedBox(height: 16),
                           _InfoCard(
@@ -102,6 +103,7 @@ class AboutSection extends StatelessWidget {
                             subtitle:
                                 'Deepening Flutter expertise and modern practices.',
                             items: _currentFocus,
+                            accentColor: AppColors.primaryHover,
                           ),
                         ],
                       ),
@@ -119,33 +121,52 @@ class _InfoCard extends StatelessWidget {
     required this.title,
     required this.subtitle,
     required this.items,
+    required this.accentColor,
   });
 
   final String title;
   final String subtitle;
   final List<String> items;
+  final Color accentColor;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(20),
+      padding: const EdgeInsets.all(22),
       decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [accentColor.withOpacity(0.18), Colors.white],
+        ),
+        borderRadius: BorderRadius.circular(18),
         border: Border.all(color: AppColors.borderLight),
+        boxShadow: [
+          BoxShadow(
+            color: accentColor.withOpacity(0.15),
+            blurRadius: 22,
+            offset: const Offset(0, 14),
+          ),
+        ],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            title,
-            style: const TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.w700,
-              color: AppColors.textPrimary,
-            ),
+          Row(
+            children: [
+              Icon(Icons.insights, color: accentColor, size: 20),
+              const SizedBox(width: 8),
+              Text(
+                title,
+                style: const TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w700,
+                  color: AppColors.textPrimary,
+                ),
+              ),
+            ],
           ),
-          const SizedBox(height: 6),
+          const SizedBox(height: 8),
           Text(
             subtitle,
             style: const TextStyle(
@@ -164,11 +185,7 @@ class _InfoCard extends StatelessWidget {
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Icon(
-                          Icons.check_circle,
-                          size: 18,
-                          color: AppColors.primary,
-                        ),
+                        Icon(Icons.check_circle, size: 18, color: accentColor),
                         const SizedBox(width: 10),
                         Expanded(
                           child: Text(

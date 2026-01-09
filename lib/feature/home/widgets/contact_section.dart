@@ -39,7 +39,10 @@ class ContactSection extends StatelessWidget {
       padding: const EdgeInsets.all(32),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(24),
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(12),
+          topRight: Radius.circular(12),
+        ),
         border: Border.all(color: AppColors.borderLight),
         boxShadow: [
           BoxShadow(
@@ -325,20 +328,18 @@ class _ContactFormCardState extends State<_ContactFormCard> {
       final response = await http.post(
         Uri.parse(_emailJsEndpoint),
         headers: const {'Content-Type': 'application/json'},
-        body: jsonEncode(
-          {
-            'service_id': _emailJsServiceId,
-            'template_id': _emailJsTemplateId,
-            'user_id': _emailJsPublicKey,
-            'template_params': {
-              'from_name': name,
-              'from_email': email,
-              'subject': subject.isEmpty ? 'New contact request' : subject,
-              'message': message,
-              'reply_to': email,
-            },
+        body: jsonEncode({
+          'service_id': _emailJsServiceId,
+          'template_id': _emailJsTemplateId,
+          'user_id': _emailJsPublicKey,
+          'template_params': {
+            'from_name': name,
+            'from_email': email,
+            'subject': subject.isEmpty ? 'New contact request' : subject,
+            'message': message,
+            'reply_to': email,
           },
-        ),
+        }),
       );
 
       if (!mounted) {
@@ -440,10 +441,7 @@ class _ContactFormCardState extends State<_ContactFormCard> {
                 controller: _messageController,
               ),
               const SizedBox(height: 20),
-              _SendButton(
-                isSending: _isSending,
-                onTap: _sendMessage,
-              ),
+              _SendButton(isSending: _isSending, onTap: _sendMessage),
             ],
           );
         },
@@ -528,8 +526,9 @@ class _SendButton extends StatelessWidget {
         if (isSending) {
           backgroundColor = AppColors.primary.withOpacity(0.7);
         } else {
-          backgroundColor =
-              isHovered ? AppColors.primaryHover : AppColors.primary;
+          backgroundColor = isHovered
+              ? AppColors.primaryHover
+              : AppColors.primary;
         }
 
         return GestureDetector(
@@ -571,7 +570,11 @@ class _SendButton extends StatelessWidget {
                     ),
                   )
                 else
-                  const Icon(Icons.arrow_forward, color: Colors.white, size: 18),
+                  const Icon(
+                    Icons.arrow_forward,
+                    color: Colors.white,
+                    size: 18,
+                  ),
               ],
             ),
           ),

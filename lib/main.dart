@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:get/get.dart';
 
 import 'core/theme/app_theme.dart';
-import 'feature/home/view/home_page.dart';
+import 'feature/splash/view/splash_screen.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -15,11 +16,11 @@ class PortfolioApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'TreeOfLogic',
+    return GetMaterialApp(
+      title: 'Hridoy Soft',
       debugShowCheckedModeBanner: false,
       theme: AppTheme.lightTheme,
-      home: HomePage(),
+      home: const SplashScreen(),
     );
   }
 }

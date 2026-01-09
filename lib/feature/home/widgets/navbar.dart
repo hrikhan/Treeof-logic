@@ -49,7 +49,7 @@ class Navbar extends StatelessWidget {
                           ),
                           SizedBox(width: 12),
                           Text(
-                            'TreeOfLogic',
+                            'Hridoy Soft',
                             style: TextStyle(
                               fontSize: 20,
                               fontWeight: FontWeight.w700,
